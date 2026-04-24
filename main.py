@@ -66,12 +66,11 @@ def scrape_linkedin_jobs(
     for option in ["--window-size=1200,1200", "--ignore-certificate-errors"]:
         chrome_options.add_argument(option)
 
+    chrome_options.add_argument("--headless")
     if platform.system() == "Linux":
         # Required for Chrome in containerized/CI environments (no kernel namespace support)
         for opt in ["--no-sandbox", "--disable-dev-shm-usage", "--disable-gpu"]:
             chrome_options.add_argument(opt)
-    else:
-        chrome_options.add_argument("--headless")
 
     driver = webdriver.Chrome(options=chrome_options)
 
@@ -197,19 +196,5 @@ def save_job_data(data: list) -> None:
 
 
 if __name__ == "__main__":
-    display = None
-    # Only use Xvfb on Linux
-    if platform.system() == "Linux":
-        try:
-            from pyvirtualdisplay import Display
-            display = Display(visible=0, size=(800, 800))
-            display.start()
-        except ImportError:
-            logging.warning("pyvirtualdisplay not installed, running without virtual display")
-    
-    try:
-        jobs = scrape_linkedin_jobs("Software Engineer", "India")
-        save_job_data(jobs)
-    finally:
-        if display:
-            display.stop()
+    jobs = scrape_linkedin_jobs("Software Engineer", "India")
+    save_job_data(jobs)
