@@ -123,8 +123,8 @@ def scrape_linkedin_jobs(
             date_posted = time_elem.get("datetime", "")
 
             # Skip if doesn't match keyword filter
-            if not _matches_keywords(title_text, keywords):
-                continue
+            # if not _matches_keywords(title_text, keywords):
+            #     continue
 
             # Skip stale postings
             if not _is_recent(date_posted, max_days_old):
