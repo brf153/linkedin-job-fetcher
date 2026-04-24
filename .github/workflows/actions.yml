@@ -12,6 +12,9 @@ jobs:
 
       - name: Checkout repo
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          persist-credentials: true
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -39,7 +42,8 @@ jobs:
           git diff-index --quiet HEAD || git commit -m "updated data Co-authored-by: brf153"
 
       - name: Push changes
-        uses: ad-m/github-push-action@v0.6.0
+        uses: ad-m/github-push-action@v0.8.0
         with:
           github_token: ${{ secrets.GH_TOKEN }}
           branch: main
+          repository: brf153/linkedin-job-fetcher
