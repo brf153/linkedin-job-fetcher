@@ -65,9 +65,12 @@ def scrape_linkedin_jobs(
     chrome_options = webdriver.ChromeOptions()
     for option in ["--window-size=1200,1200", "--ignore-certificate-errors"]:
         chrome_options.add_argument(option)
-    
-    # Add headless mode for macOS/Windows (Linux uses Xvfb)
-    if platform.system() != "Linux":
+
+    if platform.system() == "Linux":
+        # Required for Chrome in containerized/CI environments (no kernel namespace support)
+        for opt in ["--no-sandbox", "--disable-dev-shm-usage", "--disable-gpu"]:
+            chrome_options.add_argument(opt)
+    else:
         chrome_options.add_argument("--headless")
 
     driver = webdriver.Chrome(options=chrome_options)
